@@ -1,0 +1,29 @@
+# 환경 변수 (API 키)
+.env
+.env.local
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+.claude/
+
+# 집필 중간 산출물 (개인 백업만, 공유 금지시 주석 해제)
+# projects/*/drafts/
+# projects/*/revisions/
+# projects/*/memory/
