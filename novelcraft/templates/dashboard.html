@@ -8,911 +8,1040 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;1,9..144,300;1,9..144,400&family=Inter:wght@400;500&family=Noto+Serif+KR:wght@300;500;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #0b0b0d;
-    --bg-lift: #111114;
-    --ink: #ece8df;
-    --ink-dim: #86817a;
-    --ink-faint: #3a3936;
-    --hair: rgba(236,232,223,0.09);
-    --hair-strong: rgba(236,232,223,0.18);
-    --gold: #c6a15b;
-    --gold-dim: #7a6338;
-    --planned: #26262a;
-    --draft: #8c6b2a;
-    --revised: #6b834c;
-    --final: #c6a15b;
-  }
+/* ================================================================
+   ROOT / RESET / TYPOGRAPHY
+   ================================================================ */
+:root {
+  --bg: #0b0b0d;
+  --bg-lift: #111114;
+  --bg-lift2: #18181c;
+  --ink: #ece8df;
+  --ink-dim: #86817a;
+  --ink-faint: #3a3936;
+  --hair: rgba(236,232,223,0.09);
+  --hair-strong: rgba(236,232,223,0.18);
+  --gold: #c6a15b;
+  --gold-dim: #7a6338;
+  --gold-glow: rgba(198,161,91,0.12);
+  --planned: #26262a;
+  --draft: #8c6b2a;
+  --revised: #6b834c;
+  --final: #c6a15b;
+  --red: #d77a6b;
+  --green: #9db674;
+  --blue: #8fa8c9;
+}
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body {
-    background: var(--bg);
-    color: var(--ink);
-    min-height: 100vh;
-  }
-  body {
-    font-family: 'Inter', 'Noto Serif KR', -apple-system, BlinkMacSystemFont, sans-serif;
-    font-size: 14px;
-    line-height: 1.55;
-    -webkit-font-smoothing: antialiased;
-    padding: 56px clamp(28px, 6vw, 96px) 96px;
-    background-image:
-      radial-gradient(ellipse 80% 40% at 50% -10%, rgba(198,161,91,0.06), transparent 60%),
-      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' seed='3'/><feColorMatrix type='matrix' values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.025 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
-  }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  background: var(--bg);
+  color: var(--ink);
+  min-height: 100vh;
+}
+body {
+  font-family: 'Inter', 'Noto Serif KR', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 14px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  padding: 56px clamp(28px, 6vw, 96px) 96px;
+  background-image:
+    radial-gradient(ellipse 80% 40% at 50% -10%, rgba(198,161,91,0.06), transparent 60%),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' seed='3'/><feColorMatrix type='matrix' values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.025 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
 
-  .eyebrow {
-    font-family: 'Inter', sans-serif;
-    font-size: 10px;
-    font-weight: 500;
-    letter-spacing: 0.24em;
-    text-transform: uppercase;
-    color: var(--ink-dim);
-  }
+.eyebrow {
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+}
 
-  /* ──────────────────── header ──────────────────── */
-  header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    padding-bottom: 40px;
-    border-bottom: 1px solid var(--hair);
-  }
-  header .mark {
-    display: flex;
-    align-items: flex-start;
-    gap: 18px;
-  }
-  header .mark .dot {
-    width: 8px;
-    height: 8px;
-    background: var(--gold);
-    border-radius: 50%;
-    margin-top: 26px;
-    box-shadow: 0 0 18px rgba(198,161,91,0.5);
-  }
-  header h1 {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(44px, 6vw, 72px);
-    letter-spacing: 0.06em;
-    line-height: 0.85;
-    font-weight: 400;
-  }
-  header h1 .sub {
-    display: block;
-    font-family: 'Fraunces', serif;
-    font-style: italic;
-    font-weight: 300;
-    font-size: 16px;
-    letter-spacing: 0.01em;
-    color: var(--ink-dim);
-    margin-top: 14px;
-  }
-  header .meta {
-    text-align: right;
-    padding-top: 8px;
-  }
-  header .meta .date {
-    font-family: 'Fraunces', serif;
-    font-style: italic;
-    font-weight: 300;
-    font-size: 20px;
-    color: var(--ink);
-    margin-top: 8px;
-  }
-  header .meta .loc {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    color: var(--ink-dim);
-    margin-top: 14px;
-  }
+/* ================================================================
+   HEADER
+   ================================================================ */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-bottom: 40px;
+  border-bottom: 1px solid var(--hair);
+}
+header .mark {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+}
+header .mark .dot {
+  width: 8px; height: 8px;
+  background: var(--gold);
+  border-radius: 50%;
+  margin-top: 26px;
+  box-shadow: 0 0 18px rgba(198,161,91,0.5);
+}
+header h1 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(44px, 6vw, 72px);
+  letter-spacing: 0.06em;
+  line-height: 0.85;
+  font-weight: 400;
+}
+header h1 .sub {
+  display: block;
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: 16px;
+  letter-spacing: 0.01em;
+  color: var(--ink-dim);
+  margin-top: 14px;
+}
+header .meta {
+  text-align: right;
+  padding-top: 8px;
+}
+header .meta .date {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: 20px;
+  color: var(--ink);
+  margin-top: 8px;
+}
+header .meta .loc {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--ink-dim);
+  margin-top: 14px;
+}
 
-  /* ──────────────────── aggregate ──────────────────── */
-  .aggregate {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    border-bottom: 1px solid var(--hair);
-  }
-  .agg {
-    padding: 44px 28px 44px 0;
-    border-right: 1px solid var(--hair);
-    position: relative;
-  }
-  .agg:first-child { padding-left: 0; }
-  .agg:last-child { border-right: none; padding-right: 0; }
-  .agg .n {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(44px, 5.2vw, 68px);
-    line-height: 0.9;
-    color: var(--ink);
-    letter-spacing: 0.02em;
-  }
-  .agg .n .u {
-    font-family: 'Noto Serif KR', serif;
-    font-weight: 300;
-    font-size: 18px;
-    color: var(--ink-dim);
-    margin-left: 6px;
-    letter-spacing: 0;
-  }
-  .agg .label { margin-top: 14px; }
+/* ================================================================
+   PROJECT TABS (project selector)
+   ================================================================ */
+.project-tabs {
+  display: flex;
+  gap: 0;
+  margin-top: 36px;
+  border-bottom: 1px solid var(--hair);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.project-tabs::-webkit-scrollbar { display: none; }
+.project-tab {
+  background: none;
+  border: none;
+  padding: 14px 28px 14px 0;
+  font-family: 'Noto Serif KR', serif;
+  font-weight: 500;
+  font-size: 15px;
+  color: var(--ink-dim);
+  cursor: pointer;
+  white-space: nowrap;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color 160ms ease, border-color 160ms ease;
+  position: relative;
+}
+.project-tab::after {
+  content: '';
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px; height: 3px;
+  background: var(--ink-faint);
+  border-radius: 50%;
+}
+.project-tab:last-child::after { display: none; }
+.project-tab:hover { color: var(--ink); }
+.project-tab.active {
+  color: var(--gold);
+  border-bottom-color: var(--gold);
+}
+.single-project-label {
+  padding: 18px 0 14px;
+  margin-top: 36px;
+  border-bottom: 1px solid var(--hair);
+  font-family: 'Noto Serif KR', serif;
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+.single-project-label .genre-tag {
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+  margin-left: 16px;
+}
 
-  /* ──────────────────── works section ──────────────────── */
-  section.works { margin-top: 72px; }
-  .works-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    margin-bottom: 8px;
-  }
-  .works-head h2 {
-    font-family: 'Fraunces', serif;
-    font-weight: 300;
-    font-size: 26px;
-    letter-spacing: 0.005em;
-  }
-  .works-head h2 em {
-    font-style: italic;
-    color: var(--gold);
-  }
-  .works-head .count {
-    color: var(--ink-dim);
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 18px;
-    letter-spacing: 0.15em;
-  }
+/* ================================================================
+   PROGRESS OVERVIEW (Feature 1)
+   ================================================================ */
+.progress-section {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 56px;
+  padding: 52px 0 48px;
+  border-bottom: 1px solid var(--hair);
+  align-items: center;
+}
+.progress-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 240px;
+}
+.progress-hero .pct {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(80px, 10vw, 140px);
+  line-height: 0.82;
+  color: var(--gold);
+  letter-spacing: 0.015em;
+  display: flex;
+  align-items: flex-start;
+}
+.progress-hero .pct .sign {
+  font-size: 0.28em;
+  color: var(--ink-dim);
+  margin-left: 4px;
+  margin-top: 0.18em;
+}
+.progress-hero .pct-label {
+  margin-top: 14px;
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: 14px;
+  color: var(--ink-dim);
+}
+.progress-bar-wrap {
+  width: 100%;
+  height: 4px;
+  background: var(--ink-faint);
+  margin-top: 20px;
+  position: relative;
+  overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold-dim), var(--gold));
+  transition: width 600ms cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+.progress-bar-fill::after {
+  content: '';
+  position: absolute;
+  right: 0; top: -2px;
+  width: 2px; height: 8px;
+  background: var(--gold);
+  box-shadow: 0 0 10px var(--gold);
+}
 
-  .work {
-    display: grid;
-    grid-template-columns: 1.1fr 1.8fr 0.9fr;
-    gap: 56px;
-    padding: 48px 0;
-    border-top: 1px solid var(--hair);
-    position: relative;
-    transition: background 180ms ease;
-  }
-  .work:hover {
-    background: linear-gradient(90deg, rgba(198,161,91,0.035), transparent 70%);
-  }
-  .work::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: -1px;
-    width: 60px;
-    height: 1px;
-    background: var(--gold);
-  }
+.progress-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.progress-stats .stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--hair);
+}
+.progress-stats .stat-row:last-child { border-bottom: none; }
+.progress-stats .stat-k {
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+}
+.progress-stats .stat-v {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 18px;
+  color: var(--ink);
+  letter-spacing: 0.04em;
+}
+.progress-stats .stat-v.gold { color: var(--gold); }
+.progress-stats .stat-v .unit {
+  font-family: 'Noto Serif KR', serif;
+  font-weight: 300;
+  font-size: 13px;
+  color: var(--ink-dim);
+  margin-left: 4px;
+}
 
-  .title-col .genre { margin-bottom: 18px; }
-  .title-col h3 {
-    font-family: 'Noto Serif KR', 'Fraunces', serif;
-    font-weight: 700;
-    font-size: 30px;
-    line-height: 1.1;
-    letter-spacing: -0.01em;
-    color: var(--ink);
-    margin-bottom: 32px;
-  }
-  .progress-big {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 100px;
-    line-height: 0.82;
-    color: var(--gold);
-    letter-spacing: 0.015em;
-    display: flex;
-    align-items: flex-start;
-  }
-  .progress-big .p {
-    font-size: 26px;
-    color: var(--ink-dim);
-    margin-left: 4px;
-    margin-top: 8px;
-  }
-  .title-col .words {
-    margin-top: 14px;
-    font-family: 'Fraunces', serif;
-    font-style: italic;
-    font-weight: 300;
-    font-size: 15px;
-    color: var(--ink-dim);
-  }
-  .title-col .words strong {
-    color: var(--ink);
-    font-weight: 400;
-    font-style: normal;
-    font-family: 'Inter', sans-serif;
-    font-size: 14px;
-  }
+/* ================================================================
+   PROJECT ACTIONS BAR
+   ================================================================ */
+.project-actions {
+  display: flex;
+  gap: 10px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--hair);
+}
 
-  /* ──────── chapter ledger ──────── */
-  .ledger-col .ledger-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    margin-bottom: 20px;
-  }
-  .ledger-col .ledger-head .ix {
-    font-family: 'Fraunces', serif;
-    font-style: italic;
-    font-weight: 300;
-    color: var(--ink-dim);
-    font-size: 13px;
-  }
-  .chapter-strip {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
-    align-content: flex-start;
-  }
-  .chapter-cell {
-    width: 22px;
-    height: 28px;
-    background: var(--planned);
-    position: relative;
-    transition: transform 120ms ease, outline-color 120ms ease;
-    outline: 1px solid transparent;
-  }
-  .chapter-cell.draft { background: var(--draft); }
-  .chapter-cell.revised { background: var(--revised); }
-  .chapter-cell.final { background: var(--final); }
-  .chapter-cell:hover {
-    outline-color: var(--ink);
-    transform: translateY(-2px);
-    z-index: 2;
-  }
-  .chapter-cell .tip {
-    position: absolute;
-    bottom: calc(100% + 10px);
-    left: 50%;
-    transform: translateX(-50%);
-    background: #000;
-    border: 1px solid var(--hair-strong);
-    padding: 10px 12px;
-    white-space: nowrap;
-    font-size: 11px;
-    color: var(--ink);
-    display: none;
-    z-index: 20;
-    font-family: 'Inter', sans-serif;
-    pointer-events: none;
-  }
-  .chapter-cell .tip b {
-    font-family: 'Bebas Neue', sans-serif;
-    font-weight: 400;
-    letter-spacing: 0.08em;
-    color: var(--gold);
-    margin-right: 8px;
-  }
-  .chapter-cell:hover .tip { display: block; }
+/* ================================================================
+   CHAPTER GRID
+   ================================================================ */
+.chapters-section {
+  padding: 40px 0 0;
+}
+.chapters-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 24px;
+}
+.chapters-head h2 {
+  font-family: 'Fraunces', serif;
+  font-weight: 300;
+  font-size: 26px;
+  letter-spacing: 0.005em;
+}
+.chapters-head h2 em {
+  font-style: italic;
+  color: var(--gold);
+}
+.chapters-head .count {
+  color: var(--ink-dim);
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 18px;
+  letter-spacing: 0.15em;
+}
 
-  .strip-empty {
-    font-family: 'Fraunces', serif;
-    font-style: italic;
-    font-weight: 300;
-    color: var(--ink-dim);
-    padding: 10px 0;
-  }
+.chapter-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  align-content: flex-start;
+}
+.chapter-cell {
+  width: 44px;
+  height: 56px;
+  background: var(--planned);
+  position: relative;
+  transition: transform 140ms ease, outline-color 140ms ease, box-shadow 140ms ease;
+  outline: 1px solid transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.chapter-cell .cell-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  color: rgba(236,232,223,0.2);
+  pointer-events: none;
+}
+.chapter-cell.draft { background: var(--draft); }
+.chapter-cell.draft .cell-num { color: rgba(236,232,223,0.35); }
+.chapter-cell.revised { background: var(--revised); }
+.chapter-cell.revised .cell-num { color: rgba(236,232,223,0.4); }
+.chapter-cell.final { background: var(--final); }
+.chapter-cell.final .cell-num { color: rgba(11,11,13,0.5); }
+.chapter-cell:hover {
+  outline-color: var(--ink);
+  transform: translateY(-3px);
+  z-index: 2;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+}
+.chapter-cell .tip {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #000;
+  border: 1px solid var(--hair-strong);
+  padding: 10px 14px;
+  white-space: nowrap;
+  font-size: 11px;
+  color: var(--ink);
+  display: none;
+  z-index: 20;
+  font-family: 'Inter', sans-serif;
+  pointer-events: none;
+}
+.chapter-cell .tip b {
+  font-family: 'Bebas Neue', sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  color: var(--gold);
+  margin-right: 8px;
+}
+.chapter-cell:hover .tip { display: block; }
 
-  .strip-legend {
-    display: flex;
-    gap: 22px;
-    margin-top: 26px;
-    font-family: 'Inter', sans-serif;
-    font-size: 10px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--ink-dim);
-  }
-  .strip-legend span {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-  }
-  .strip-legend .sw {
-    width: 10px;
-    height: 10px;
-    display: inline-block;
-  }
-  .strip-legend .sw.planned { background: var(--planned); }
-  .strip-legend .sw.draft { background: var(--draft); }
-  .strip-legend .sw.revised { background: var(--revised); }
-  .strip-legend .sw.final { background: var(--final); }
+.strip-empty {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 300;
+  color: var(--ink-dim);
+  padding: 10px 0;
+}
 
-  /* ──────── stats col ──────── */
-  .stats-col {
-    border-left: 1px solid var(--hair);
-    padding-left: 36px;
-  }
-  .stats-col .row {
-    padding: 11px 0;
-    border-bottom: 1px solid var(--hair);
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-  }
-  .stats-col .row:last-of-type { border-bottom: none; }
-  .stats-col .k {
-    color: var(--ink-dim);
-    font-size: 10px;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    font-family: 'Inter', sans-serif;
-  }
-  .stats-col .v {
-    font-family: 'Fraunces', serif;
-    font-weight: 300;
-    font-size: 18px;
-    color: var(--ink);
-  }
-  .stats-col .v.gold { color: var(--gold); }
+.strip-legend {
+  display: flex;
+  gap: 22px;
+  margin-top: 26px;
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+}
+.strip-legend span {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.strip-legend .sw {
+  width: 10px; height: 10px;
+  display: inline-block;
+}
+.strip-legend .sw.planned { background: var(--planned); }
+.strip-legend .sw.draft { background: var(--draft); }
+.strip-legend .sw.revised { background: var(--revised); }
+.strip-legend .sw.final { background: var(--final); }
 
-  .bible-block { margin-top: 22px; }
-  .bible-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    margin-bottom: 10px;
-  }
-  .bible-head .k {
-    font-size: 10px;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--ink-dim);
-  }
-  .bible-head .v {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 16px;
-    letter-spacing: 0.08em;
-    color: var(--ink);
-  }
-  .bible-bar {
-    display: flex;
-    gap: 3px;
-  }
-  .bible-bar .seg {
-    flex: 1;
-    height: 3px;
-    background: var(--ink-faint);
-  }
-  .bible-bar .seg.ok { background: var(--gold); }
+/* ================================================================
+   BUTTONS
+   ================================================================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 18px;
+  background: transparent;
+  border: 1px solid var(--hair-strong);
+  color: var(--ink);
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: border-color 160ms ease, color 160ms ease, background 160ms ease;
+  white-space: nowrap;
+}
+.btn:hover:not(:disabled) {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+.btn:disabled { opacity: 0.35; cursor: not-allowed; }
+.btn.primary {
+  border-color: var(--gold-dim);
+  color: var(--gold);
+  background: rgba(198,161,91,0.06);
+}
+.btn.primary:hover:not(:disabled) {
+  background: rgba(198,161,91,0.12);
+  border-color: var(--gold);
+}
+.btn.ghost {
+  border-color: transparent;
+  color: var(--ink-dim);
+  padding: 8px 12px;
+}
+.btn.ghost:hover:not(:disabled) {
+  color: var(--ink);
+  border-color: var(--hair);
+}
+.btn .icon-svg {
+  width: 14px; height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
 
-  .touched {
-    margin-top: 22px;
-    font-family: 'Fraunces', serif;
-    font-style: italic;
-    font-weight: 300;
-    color: var(--ink-dim);
-    font-size: 13px;
-  }
-  .touched strong {
-    font-family: 'Inter', sans-serif;
-    font-style: normal;
-    font-weight: 500;
-    color: var(--ink);
-    font-size: 12px;
-    letter-spacing: 0.04em;
-  }
+/* ================================================================
+   SIDE DRAWER (Chapter Reader - Feature 2/3)
+   ================================================================ */
+.drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 220ms ease;
+  z-index: 40;
+}
+.drawer-backdrop.open { opacity: 1; pointer-events: auto; }
 
-  /* ──────────────────── empty state ──────────────────── */
-  .empty {
-    text-align: center;
-    padding: 140px 20px 120px;
-    border-top: 1px solid var(--hair);
-  }
-  .empty .ornament {
-    font-family: 'Fraunces', serif;
-    font-style: italic;
-    font-weight: 300;
-    font-size: 140px;
-    color: var(--ink-faint);
-    line-height: 1;
-    user-select: none;
-  }
-  .empty h3 {
-    font-family: 'Noto Serif KR', serif;
-    font-size: 24px;
-    font-weight: 700;
-    margin-top: 36px;
-    color: var(--ink);
-    letter-spacing: -0.01em;
-  }
-  .empty p {
-    margin-top: 16px;
-    color: var(--ink-dim);
-    font-family: 'Fraunces', serif;
-    font-style: italic;
-    font-weight: 300;
-    font-size: 16px;
-  }
-  .empty .cmd {
-    display: inline-block;
-    margin-top: 32px;
-    padding: 14px 22px;
-    background: var(--bg-lift);
-    border: 1px solid var(--hair-strong);
-    font-family: 'JetBrains Mono', ui-monospace, monospace;
-    font-size: 13px;
-    color: var(--gold);
-    letter-spacing: 0.02em;
-  }
-  .empty .cmd .dol { color: var(--ink-dim); margin-right: 10px; }
+.drawer {
+  position: fixed;
+  top: 0; right: 0;
+  height: 100vh;
+  width: min(760px, 96vw);
+  background: var(--bg-lift);
+  border-left: 1px solid var(--hair-strong);
+  transform: translateX(100%);
+  transition: transform 280ms cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  box-shadow: -30px 0 60px rgba(0,0,0,0.5);
+}
+.drawer.open { transform: translateX(0); }
 
-  /* ──────────────────── footer ──────────────────── */
-  footer {
-    margin-top: 96px;
-    padding-top: 28px;
-    border-top: 1px solid var(--hair);
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    color: var(--ink-dim);
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-  }
-  footer .colophon {
-    font-family: 'Fraunces', serif;
-    font-style: italic;
-    text-transform: none;
-    letter-spacing: 0;
-    font-size: 13px;
-  }
+.drawer-head {
+  padding: 32px 36px 20px;
+  border-bottom: 1px solid var(--hair);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+  flex-shrink: 0;
+}
+.drawer-head .cid {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 36px;
+  color: var(--gold);
+  letter-spacing: 0.06em;
+  line-height: 1;
+}
+.drawer-head .proj {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 300;
+  color: var(--ink-dim);
+  font-size: 13px;
+  margin-top: 8px;
+}
+.drawer-head .status-pill {
+  display: inline-block;
+  font-family: 'Inter', sans-serif;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  margin-top: 10px;
+  border: 1px solid var(--hair-strong);
+  color: var(--ink-dim);
+}
+.drawer-head .status-pill.draft { border-color: var(--draft); color: var(--draft); }
+.drawer-head .status-pill.revised { border-color: var(--revised); color: var(--revised); }
+.drawer-head .status-pill.final { border-color: var(--gold); color: var(--gold); }
+.drawer-head .close-x {
+  background: none;
+  border: none;
+  color: var(--ink-dim);
+  font-size: 26px;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  font-family: 'Fraunces', serif;
+  flex-shrink: 0;
+}
+.drawer-head .close-x:hover { color: var(--ink); }
 
-  @media (max-width: 1024px) {
-    .work { grid-template-columns: 1fr; gap: 36px; }
-    .stats-col {
-      border-left: none;
-      padding-left: 0;
-      border-top: 1px solid var(--hair);
-      padding-top: 28px;
-    }
-  }
-  @media (max-width: 720px) {
-    body { padding: 36px 22px 64px; }
-    .aggregate { grid-template-columns: repeat(2, 1fr); }
-    .agg { border-right: none; border-bottom: 1px solid var(--hair); padding: 28px 0; }
-    .agg:nth-child(2n) { padding-left: 20px; }
-    header { flex-direction: column; gap: 24px; }
-    header .meta { text-align: left; }
-  }
+/* drawer tabs */
+.drawer-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--hair);
+  padding: 0 36px;
+  flex-shrink: 0;
+}
+.drawer-tab {
+  background: none;
+  border: none;
+  padding: 14px 18px 12px;
+  color: var(--ink-dim);
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color 160ms ease, border-color 160ms ease;
+}
+.drawer-tab:hover { color: var(--ink); }
+.drawer-tab.active {
+  color: var(--gold);
+  border-bottom-color: var(--gold);
+}
 
-  /* ──────────────────── interactive atelier ──────────────────── */
-  .chapter-cell { cursor: pointer; }
+.drawer-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0;
+  min-height: 0;
+}
 
-  .btn {
-    display: inline-block;
-    padding: 9px 16px;
-    background: transparent;
-    border: 1px solid var(--hair-strong);
-    color: var(--ink);
-    font-family: 'Inter', sans-serif;
-    font-size: 10px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: border-color 160ms ease, color 160ms ease, background 160ms ease;
-  }
-  .btn:hover:not(:disabled) {
-    border-color: var(--gold);
-    color: var(--gold);
-  }
-  .btn:disabled { opacity: 0.35; cursor: not-allowed; }
-  .btn.primary { border-color: var(--gold-dim); color: var(--gold); }
-  .btn.primary:hover:not(:disabled) { background: rgba(198,161,91,0.08); }
-  .btn.ghost { border-color: transparent; color: var(--ink-dim); padding: 6px 10px; }
-  .btn.ghost:hover:not(:disabled) { color: var(--ink); border-color: var(--hair); }
+.drawer-pane {
+  display: none;
+  padding: 28px 36px 40px;
+}
+.drawer-pane.active { display: block; }
 
-  .bible-edit-link {
-    margin-top: 10px;
-    display: inline-block;
-    font-family: 'Inter', sans-serif;
-    font-size: 10px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--ink-dim);
-    background: none;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-    border-bottom: 1px solid var(--hair);
-  }
-  .bible-edit-link:hover { color: var(--gold); border-bottom-color: var(--gold-dim); }
+/* book-style reading */
+.book-page {
+  font-family: 'Noto Serif KR', serif;
+  font-weight: 300;
+  font-size: 15px;
+  line-height: 2;
+  color: var(--ink);
+  white-space: pre-wrap;
+  word-break: keep-all;
+  letter-spacing: 0.005em;
+  max-width: 620px;
+}
+.book-page p { margin-bottom: 1.2em; }
 
-  /* ─── side drawer (chapter actions) ─── */
-  .drawer-backdrop {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.55);
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 220ms ease;
-    z-index: 40;
-  }
-  .drawer-backdrop.open { opacity: 1; pointer-events: auto; }
-  .drawer {
-    position: fixed;
-    top: 0;
-    right: 0;
-    height: 100vh;
-    width: min(720px, 94vw);
-    background: var(--bg-lift);
-    border-left: 1px solid var(--hair-strong);
-    transform: translateX(100%);
-    transition: transform 260ms cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 50;
-    display: flex;
-    flex-direction: column;
-    box-shadow: -30px 0 60px rgba(0,0,0,0.5);
-  }
-  .drawer.open { transform: translateX(0); }
-  .drawer-head {
-    padding: 32px 36px 20px;
-    border-bottom: 1px solid var(--hair);
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 20px;
-  }
-  .drawer-head .cid {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 36px;
-    color: var(--gold);
-    letter-spacing: 0.06em;
-    line-height: 1;
-  }
-  .drawer-head .proj {
-    font-family: 'Fraunces', serif;
-    font-style: italic;
-    font-weight: 300;
-    color: var(--ink-dim);
-    font-size: 13px;
-    margin-top: 8px;
-  }
-  .drawer-head .close-x {
-    background: none;
-    border: none;
-    color: var(--ink-dim);
-    font-size: 26px;
-    cursor: pointer;
-    padding: 0;
-    line-height: 1;
-    font-family: 'Fraunces', serif;
-  }
-  .drawer-head .close-x:hover { color: var(--ink); }
+.beat-text {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 14px;
+  line-height: 1.85;
+  color: var(--ink-dim);
+  font-style: italic;
+  border-left: 2px solid var(--gold-dim);
+  padding: 16px 20px;
+  background: rgba(198,161,91,0.03);
+  white-space: pre-wrap;
+}
 
-  .drawer-body {
-    flex: 1;
-    overflow-y: auto;
-    padding: 28px 36px 40px;
-  }
+.drawer-placeholder {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 300;
+  color: var(--ink-dim);
+  padding: 30px 0;
+  font-size: 15px;
+}
 
-  .drawer-section { margin-bottom: 32px; }
-  .drawer-section .eyebrow { margin-bottom: 10px; }
-  .drawer-section .beat-text,
-  .drawer-section .body-text {
-    font-family: 'Noto Serif KR', serif;
-    font-size: 14px;
-    line-height: 1.75;
-    color: var(--ink);
-    white-space: pre-wrap;
-  }
-  .drawer-section .beat-text {
-    color: var(--ink-dim);
-    font-style: italic;
-    border-left: 2px solid var(--gold-dim);
-    padding-left: 16px;
-  }
+.drawer-actions {
+  display: flex;
+  gap: 10px;
+  padding: 18px 36px;
+  border-top: 1px solid var(--hair);
+  background: var(--bg);
+  flex-shrink: 0;
+}
 
-  .drawer-actions {
-    display: flex;
-    gap: 10px;
-    padding: 20px 36px;
-    border-top: 1px solid var(--hair);
-    background: var(--bg);
-  }
+/* log panel */
+.log-section {
+  padding: 20px 36px;
+  border-bottom: 1px solid var(--hair);
+  flex-shrink: 0;
+  display: none;
+}
+.log-panel {
+  background: #000;
+  border: 1px solid var(--hair);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--ink);
+  padding: 14px 16px;
+  max-height: 200px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  line-height: 1.55;
+}
+.log-panel .ln { color: var(--ink-dim); }
+.log-panel .stage-write { color: var(--gold); }
+.log-panel .stage-review { color: var(--green); }
+.log-panel .stage-summary { color: var(--blue); }
+.log-panel .stage-error { color: var(--red); }
+.log-panel .stage-done { color: var(--gold); font-weight: 500; }
 
-  .tabs {
-    display: flex;
-    gap: 24px;
-    border-bottom: 1px solid var(--hair);
-    margin-bottom: 18px;
-  }
-  .tab {
-    background: none;
-    border: none;
-    padding: 10px 0;
-    color: var(--ink-dim);
-    font-family: 'Inter', sans-serif;
-    font-size: 10px;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    cursor: pointer;
-    border-bottom: 1px solid transparent;
-    margin-bottom: -1px;
-  }
-  .tab.active { color: var(--gold); border-bottom-color: var(--gold); }
-  .tab-pane { display: none; }
-  .tab-pane.active { display: block; }
+/* review cards */
+.review-card {
+  border: 1px solid var(--hair);
+  padding: 18px 20px;
+  margin-bottom: 10px;
+  background: rgba(0,0,0,0.22);
+}
+.review-card .sev {
+  display: inline-block;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  padding: 2px 8px;
+  margin-right: 10px;
+}
+.review-card .sev.high { background: rgba(215,122,107,0.18); color: var(--red); }
+.review-card .sev.medium { background: rgba(198,161,91,0.18); color: var(--gold); }
+.review-card .sev.low { background: rgba(157,182,116,0.16); color: var(--green); }
+.review-card .cat {
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+}
+.review-card .desc {
+  margin-top: 10px;
+  font-family: 'Noto Serif KR', serif;
+  font-size: 13px;
+  line-height: 1.65;
+}
+.review-card .sug {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--hair);
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: 13px;
+  color: var(--ink-dim);
+}
+.review-summary {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: 15px;
+  color: var(--ink);
+  padding: 14px 18px;
+  border-left: 2px solid var(--gold);
+  margin-bottom: 18px;
+}
 
-  .log-panel {
-    background: #000;
-    border: 1px solid var(--hair);
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    color: var(--ink);
-    padding: 14px 16px;
-    max-height: 240px;
-    overflow-y: auto;
-    white-space: pre-wrap;
-    line-height: 1.55;
-  }
-  .log-panel .ln { color: var(--ink-dim); }
-  .log-panel .stage-write { color: var(--gold); }
-  .log-panel .stage-review { color: #9db674; }
-  .log-panel .stage-summary { color: #8fa8c9; }
-  .log-panel .stage-error { color: #d77a6b; }
-  .log-panel .stage-done { color: var(--gold); font-weight: 500; }
+/* ================================================================
+   BIBLE EDITOR MODAL (Feature 4)
+   ================================================================ */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.72);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 60;
+  padding: 40px;
+}
+.modal-backdrop.open { display: flex; }
 
-  .review-card {
-    border: 1px solid var(--hair);
-    padding: 18px 20px;
-    margin-bottom: 10px;
-    background: rgba(0,0,0,0.22);
-  }
-  .review-card .sev {
-    display: inline-block;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 11px;
-    letter-spacing: 0.14em;
-    padding: 2px 8px;
-    margin-right: 10px;
-  }
-  .review-card .sev.high { background: rgba(215,122,107,0.18); color: #d77a6b; }
-  .review-card .sev.medium { background: rgba(198,161,91,0.18); color: var(--gold); }
-  .review-card .sev.low { background: rgba(157,182,116,0.16); color: #9db674; }
-  .review-card .cat {
-    font-family: 'Inter', sans-serif;
-    font-size: 10px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--ink-dim);
-  }
-  .review-card .desc {
-    margin-top: 10px;
-    font-family: 'Noto Serif KR', serif;
-    font-size: 13px;
-    line-height: 1.65;
-  }
-  .review-card .sug {
-    margin-top: 8px;
-    padding-top: 8px;
-    border-top: 1px dashed var(--hair);
-    font-family: 'Fraunces', serif;
-    font-style: italic;
-    font-weight: 300;
-    font-size: 13px;
-    color: var(--ink-dim);
-  }
-  .review-summary {
-    font-family: 'Fraunces', serif;
-    font-style: italic;
-    font-weight: 300;
-    font-size: 15px;
-    color: var(--ink);
-    padding: 14px 18px;
-    border-left: 2px solid var(--gold);
-    margin-bottom: 18px;
-  }
+.modal {
+  background: var(--bg-lift);
+  border: 1px solid var(--hair-strong);
+  width: min(1100px, 100%);
+  height: min(82vh, 780px);
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  overflow: hidden;
+}
+.modal-side {
+  border-right: 1px solid var(--hair);
+  overflow-y: auto;
+  padding: 24px 0;
+}
+.modal-side h4 {
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+  padding: 8px 28px 10px;
+}
+.file-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 9px 28px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--ink-dim);
+  background: none;
+  border: none;
+  border-left: 2px solid transparent;
+  cursor: pointer;
+}
+.file-item:hover { color: var(--ink); }
+.file-item.active {
+  color: var(--gold);
+  border-left-color: var(--gold);
+  background: rgba(198,161,91,0.05);
+}
+.file-item .dim { color: var(--ink-faint); }
 
-  .drawer-placeholder {
-    font-family: 'Fraunces', serif;
-    font-style: italic;
-    font-weight: 300;
-    color: var(--ink-dim);
-    padding: 30px 0;
-  }
+.modal-main {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.modal-head {
+  padding: 20px 28px;
+  border-bottom: 1px solid var(--hair);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-shrink: 0;
+}
+.modal-head .filename {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 22px;
+  letter-spacing: 0.05em;
+  color: var(--ink);
+}
+.modal-head .proj-tag {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 300;
+  color: var(--ink-dim);
+  font-size: 13px;
+}
+.modal-head .actions { display: flex; gap: 8px; }
+.editor {
+  flex: 1;
+  width: 100%;
+  background: #000;
+  color: var(--ink);
+  border: none;
+  padding: 22px 28px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12.5px;
+  line-height: 1.7;
+  resize: none;
+  outline: none;
+}
+.editor:focus { background: #07070a; }
+.modal-foot {
+  padding: 12px 28px;
+  border-top: 1px solid var(--hair);
+  display: flex;
+  justify-content: space-between;
+  color: var(--ink-dim);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  flex-shrink: 0;
+}
 
-  /* ─── bible editor modal ─── */
-  .modal-backdrop {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.72);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 60;
-    padding: 40px;
+/* ================================================================
+   TOAST
+   ================================================================ */
+.toast {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  background: var(--bg-lift);
+  border: 1px solid var(--hair-strong);
+  padding: 14px 20px;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  color: var(--ink);
+  z-index: 70;
+  transform: translateY(20px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 200ms ease, transform 200ms ease;
+  max-width: 380px;
+}
+.toast.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
+.toast.ok { border-left: 3px solid var(--gold); }
+.toast.err { border-left: 3px solid var(--red); }
+
+/* ================================================================
+   EMPTY STATE
+   ================================================================ */
+.empty {
+  text-align: center;
+  padding: 140px 20px 120px;
+  border-top: 1px solid var(--hair);
+}
+.empty .ornament {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: 140px;
+  color: var(--ink-faint);
+  line-height: 1;
+  user-select: none;
+}
+.empty h3 {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 24px;
+  font-weight: 700;
+  margin-top: 36px;
+  color: var(--ink);
+}
+.empty p {
+  margin-top: 16px;
+  color: var(--ink-dim);
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: 16px;
+}
+.empty .cmd {
+  display: inline-block;
+  margin-top: 32px;
+  padding: 14px 22px;
+  background: var(--bg-lift);
+  border: 1px solid var(--hair-strong);
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 13px;
+  color: var(--gold);
+}
+.empty .cmd .dol { color: var(--ink-dim); margin-right: 10px; }
+
+/* ================================================================
+   FOOTER
+   ================================================================ */
+footer {
+  margin-top: 96px;
+  padding-top: 28px;
+  border-top: 1px solid var(--hair);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  color: var(--ink-dim);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+footer .colophon {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 13px;
+}
+
+/* ================================================================
+   RESPONSIVE
+   ================================================================ */
+@media (max-width: 1024px) {
+  .progress-section {
+    grid-template-columns: 1fr;
+    gap: 36px;
   }
-  .modal-backdrop.open { display: flex; }
-  .modal {
-    background: var(--bg-lift);
-    border: 1px solid var(--hair-strong);
-    width: min(1100px, 100%);
-    height: min(82vh, 780px);
-    display: grid;
-    grid-template-columns: 260px 1fr;
-    overflow: hidden;
-  }
+  .progress-hero { align-items: flex-start; }
+  .modal { grid-template-columns: 1fr; }
   .modal-side {
-    border-right: 1px solid var(--hair);
-    overflow-y: auto;
-    padding: 24px 0;
-  }
-  .modal-side h4 {
-    font-family: 'Inter', sans-serif;
-    font-size: 10px;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: var(--ink-dim);
-    padding: 8px 28px 10px;
-  }
-  .file-item {
-    display: block;
-    width: 100%;
-    text-align: left;
-    padding: 9px 28px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    color: var(--ink-dim);
-    background: none;
-    border: none;
-    border-left: 2px solid transparent;
-    cursor: pointer;
-  }
-  .file-item:hover { color: var(--ink); }
-  .file-item.active {
-    color: var(--gold);
-    border-left-color: var(--gold);
-    background: rgba(198,161,91,0.05);
-  }
-  .file-item .dim { color: var(--ink-faint); }
-
-  .modal-main {
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-  }
-  .modal-head {
-    padding: 20px 28px;
+    max-height: 160px;
+    border-right: none;
     border-bottom: 1px solid var(--hair);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 16px;
   }
-  .modal-head .filename {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 22px;
-    letter-spacing: 0.05em;
-    color: var(--ink);
-  }
-  .modal-head .proj-tag {
-    font-family: 'Fraunces', serif;
-    font-style: italic;
-    font-weight: 300;
-    color: var(--ink-dim);
-    font-size: 13px;
-  }
-  .modal-head .actions { display: flex; gap: 8px; }
-  .editor {
-    flex: 1;
-    width: 100%;
-    background: #000;
-    color: var(--ink);
-    border: none;
-    padding: 22px 28px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12.5px;
-    line-height: 1.7;
-    resize: none;
-    outline: none;
-  }
-  .editor:focus { background: #07070a; }
-  .modal-foot {
-    padding: 12px 28px;
-    border-top: 1px solid var(--hair);
-    display: flex;
-    justify-content: space-between;
-    color: var(--ink-dim);
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.08em;
-  }
+}
+@media (max-width: 720px) {
+  body { padding: 36px 22px 64px; }
+  header { flex-direction: column; gap: 24px; }
+  header .meta { text-align: left; }
+  .chapter-cell { width: 36px; height: 46px; }
+  .drawer { width: 100vw; }
+}
 
-  /* ─── toast ─── */
-  .toast {
-    position: fixed;
-    bottom: 28px;
-    right: 28px;
-    background: var(--bg-lift);
-    border: 1px solid var(--hair-strong);
-    padding: 14px 20px;
-    font-family: 'Inter', sans-serif;
-    font-size: 12px;
-    color: var(--ink);
-    z-index: 70;
-    transform: translateY(20px);
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 200ms ease, transform 200ms ease;
-  }
-  .toast.show { opacity: 1; transform: translateY(0); }
-  .toast.ok { border-left: 3px solid var(--gold); }
-  .toast.err { border-left: 3px solid #d77a6b; }
+/* ================================================================
+   LOADING SPINNER
+   ================================================================ */
+@keyframes spin { to { transform: rotate(360deg); } }
+.spinner {
+  display: inline-block;
+  width: 16px; height: 16px;
+  border: 1.5px solid var(--ink-faint);
+  border-top-color: var(--gold);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+/* ================================================================
+   SCROLLBAR
+   ================================================================ */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--ink-faint); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--ink-dim); }
 </style>
 </head>
 <body>
 
+<!-- =================== HEADER =================== -->
 <header>
   <div class="mark">
     <div class="dot"></div>
     <h1>
       NOVELCRAFT
-      <span class="sub">이지연 집필 공방 · <em>an authoring atelier</em></span>
+      <span class="sub">집필 공방 · <em>an authoring atelier</em></span>
     </h1>
   </div>
   <div class="meta">
     <div class="eyebrow">Workstation</div>
-    <div class="date" id="date">—</div>
-    <div class="loc" id="loc">localhost · fantasy novel</div>
+    <div class="date" id="date">--</div>
+    <div class="loc">localhost</div>
   </div>
 </header>
 
-<div class="aggregate">
-  <div class="agg">
-    <div class="n" id="stat-works">—</div>
-    <div class="label eyebrow">Works in progress</div>
-  </div>
-  <div class="agg">
-    <div class="n" id="stat-chapters">—</div>
-    <div class="label eyebrow">Chapters committed</div>
-  </div>
-  <div class="agg">
-    <div class="n" id="stat-words">—</div>
-    <div class="label eyebrow">Characters written</div>
-  </div>
-  <div class="agg">
-    <div class="n" id="stat-final">—</div>
-    <div class="label eyebrow">Ready for press</div>
+<!-- =================== PROJECT TABS (Feature 6) =================== -->
+<div id="project-selector"></div>
+
+<!-- =================== MAIN CONTENT =================== -->
+<div id="main-content">
+  <div style="padding:80px 0;text-align:center;">
+    <div class="spinner" style="width:24px;height:24px;margin:0 auto;"></div>
+    <div style="margin-top:18px;font-family:'Fraunces',serif;font-style:italic;color:var(--ink-dim);font-size:14px;">
+      불러오는 중...
+    </div>
   </div>
 </div>
 
-<section class="works">
-  <div class="works-head">
-    <h2>The <em>Manuscripts</em></h2>
-    <div class="count" id="count">— WORKS</div>
-  </div>
-  <div id="works"></div>
-</section>
-
+<!-- =================== FOOTER =================== -->
 <footer>
-  <div class="colophon">novelcraft — crafted in quiet hours.</div>
-  <div id="updated">—</div>
+  <div class="colophon">novelcraft -- crafted in quiet hours.</div>
+  <div id="updated">--</div>
 </footer>
 
-<!-- ───────── Chapter drawer ───────── -->
+<!-- =================== CHAPTER DRAWER (Feature 2/3) =================== -->
 <div class="drawer-backdrop" id="drawer-backdrop"></div>
 <aside class="drawer" id="drawer" aria-hidden="true">
   <div class="drawer-head">
     <div>
-      <div class="cid" id="dr-cid">—</div>
-      <div class="proj" id="dr-proj">—</div>
+      <div class="cid" id="dr-cid">--</div>
+      <div class="proj" id="dr-proj">--</div>
+      <div class="status-pill" id="dr-status">--</div>
     </div>
-    <button class="close-x" id="dr-close" title="닫기">✕</button>
+    <button class="close-x" id="dr-close" title="닫기">&#10005;</button>
+  </div>
+  <div class="drawer-tabs" id="dr-tabs">
+    <button class="drawer-tab active" data-tab="beat">Beat</button>
+    <button class="drawer-tab" data-tab="draft">Draft</button>
+    <button class="drawer-tab" data-tab="final">Final</button>
+    <button class="drawer-tab" data-tab="review">Review</button>
+    <button class="drawer-tab" data-tab="summary">Summary</button>
+  </div>
+  <div class="log-section" id="log-section">
+    <div class="eyebrow" style="margin-bottom:8px;">Live log</div>
+    <div class="log-panel" id="log-panel"></div>
   </div>
   <div class="drawer-body" id="dr-body">
-    <div class="drawer-placeholder">불러오는 중…</div>
+    <div class="drawer-pane active" data-pane="beat" id="pane-beat">
+      <div class="drawer-placeholder">불러오는 중...</div>
+    </div>
+    <div class="drawer-pane" data-pane="draft" id="pane-draft">
+      <div class="drawer-placeholder">불러오는 중...</div>
+    </div>
+    <div class="drawer-pane" data-pane="final" id="pane-final">
+      <div class="drawer-placeholder">불러오는 중...</div>
+    </div>
+    <div class="drawer-pane" data-pane="review" id="pane-review">
+      <div class="drawer-placeholder">불러오는 중...</div>
+    </div>
+    <div class="drawer-pane" data-pane="summary" id="pane-summary">
+      <div class="drawer-placeholder">불러오는 중...</div>
+    </div>
   </div>
   <div class="drawer-actions">
-    <button class="btn primary" id="dr-write">집필 시작</button>
+    <button class="btn primary" id="dr-write">
+      <svg class="icon-svg" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+      집필 시작
+    </button>
     <button class="btn" id="dr-approve" disabled>최종 승인</button>
     <button class="btn ghost" id="dr-refresh">새로고침</button>
   </div>
 </aside>
 
-<!-- ───────── Bible editor modal ───────── -->
+<!-- =================== BIBLE EDITOR MODAL (Feature 4) =================== -->
 <div class="modal-backdrop" id="bible-modal">
   <div class="modal">
     <div class="modal-side">
@@ -924,8 +1053,8 @@
     <div class="modal-main">
       <div class="modal-head">
         <div>
-          <div class="filename" id="bm-filename">—</div>
-          <div class="proj-tag" id="bm-proj">—</div>
+          <div class="filename" id="bm-filename">--</div>
+          <div class="proj-tag" id="bm-proj">--</div>
         </div>
         <div class="actions">
           <button class="btn primary" id="bm-save">저장</button>
@@ -934,32 +1063,27 @@
       </div>
       <textarea class="editor" id="bm-editor" spellcheck="false" placeholder="파일을 선택하세요."></textarea>
       <div class="modal-foot">
-        <span id="bm-status">—</span>
+        <span id="bm-status">--</span>
         <span id="bm-size">0 bytes</span>
       </div>
     </div>
   </div>
 </div>
 
+<!-- =================== TOAST =================== -->
 <div class="toast" id="toast"></div>
 
+<!-- =================== JAVASCRIPT =================== -->
 <script>
-const STATUS_LABEL = { planned: 'Planned', draft: 'Draft', revised: 'Revised', final: 'Final' };
+/* ================================================================
+   UTILITY
+   ================================================================ */
+const STATUS_LABEL = { planned: '예정', draft: '초고', revised: '수정', final: '최종' };
+const STATUS_LABEL_EN = { planned: 'Planned', draft: 'Draft', revised: 'Revised', final: 'Final' };
 
 function fmt(n) { return Number(n || 0).toLocaleString('ko-KR'); }
 function pct(x) { return Math.round((x || 0) * 100); }
 function pad2(n) { return String(n).padStart(2, '0'); }
-
-function relTime(iso) {
-  if (!iso) return 'untouched';
-  const d = new Date(iso);
-  const diff = (Date.now() - d.getTime()) / 1000;
-  if (diff < 60) return 'moments ago';
-  if (diff < 3600) return Math.floor(diff/60) + ' min ago';
-  if (diff < 86400) return Math.floor(diff/3600) + ' hr ago';
-  if (diff < 86400*30) return Math.floor(diff/86400) + ' days ago';
-  return d.toLocaleDateString('ko-KR');
-}
 
 function escapeHtml(s) {
   return String(s || '').replace(/[&<>"']/g, c => ({
@@ -967,148 +1091,302 @@ function escapeHtml(s) {
   }[c]));
 }
 
-function workRow(p) {
-  const projAttr = escapeHtml(p.name);
-  const cells = p.chapters.map(c => {
-    const words = c.words ? `${fmt(c.words)}자` : '—';
-    const tip = `<span class="tip"><b>${c.id.toUpperCase()}</b>${STATUS_LABEL[c.status]} · ${words}</span>`;
-    return `<div class="chapter-cell ${c.status}" data-project="${projAttr}" data-chapter="${c.id}">${tip}</div>`;
-  }).join('');
-
-  const strip = cells || '<div class="strip-empty">챕터 비트(outline/chapters.md)가 비어 있습니다.</div>';
-
-  const b = p.bible;
-  const bibleSeg = b.items.map(i => `<div class="seg ${i.ok ? 'ok' : ''}"></div>`).join('');
-
-  const sc = p.status_counts;
-
-  return `
-    <article class="work">
-      <div class="title-col">
-        <div class="eyebrow genre">${escapeHtml(p.genre)}</div>
-        <h3>${escapeHtml(p.name)}</h3>
-        <div class="progress-big">${pct(p.progress)}<span class="p">%</span></div>
-        <div class="words">
-          <strong>${fmt(p.total_words)}</strong>
-          &nbsp;of&nbsp; ${fmt(p.target_length)}자
-        </div>
-      </div>
-
-      <div class="ledger-col">
-        <div class="ledger-head">
-          <div class="eyebrow">Chapter ledger</div>
-          <div class="ix">${p.chapters.length} entries</div>
-        </div>
-        <div class="chapter-strip">${strip}</div>
-        <div class="strip-legend">
-          <span><i class="sw planned"></i>Planned</span>
-          <span><i class="sw draft"></i>Draft</span>
-          <span><i class="sw revised"></i>Revised</span>
-          <span><i class="sw final"></i>Final</span>
-        </div>
-      </div>
-
-      <div class="stats-col">
-        <div class="row"><span class="k">Chapters</span><span class="v">${p.chapters.length}</span></div>
-        <div class="row"><span class="k">Final</span><span class="v gold">${sc.final || 0}</span></div>
-        <div class="row"><span class="k">Revised</span><span class="v">${sc.revised || 0}</span></div>
-        <div class="row"><span class="k">Draft</span><span class="v">${sc.draft || 0}</span></div>
-
-        <div class="bible-block">
-          <div class="bible-head">
-            <span class="k">Bible readiness</span>
-            <span class="v">${b.ready}<span style="color:var(--ink-dim)">/${b.total}</span></span>
-          </div>
-          <div class="bible-bar">${bibleSeg}</div>
-          <button class="bible-edit-link" data-bible-project="${projAttr}">Edit bible →</button>
-        </div>
-
-        <div class="touched">
-          <strong>${relTime(p.last_touched_iso)}</strong><br>
-          last touched
-        </div>
-      </div>
-    </article>
-  `;
+function relTime(iso) {
+  if (!iso) return '미기록';
+  const d = new Date(iso);
+  const diff = (Date.now() - d.getTime()) / 1000;
+  if (diff < 60) return '방금 전';
+  if (diff < 3600) return Math.floor(diff / 60) + '분 전';
+  if (diff < 86400) return Math.floor(diff / 3600) + '시간 전';
+  if (diff < 86400 * 30) return Math.floor(diff / 86400) + '일 전';
+  return d.toLocaleDateString('ko-KR');
 }
 
-async function load() {
-  let data;
-  try {
-    const r = await fetch('/api/projects');
-    data = await r.json();
-  } catch (e) {
-    return;
-  }
+/* ================================================================
+   GLOBAL STATE
+   ================================================================ */
+let allProjects = [];
+let activeProjectIndex = 0;
+let currentChapter = null;   // { project, chapter_id }
+let activeEventSource = null;
 
-  const now = new Date();
-  document.getElementById('date').textContent = now.toLocaleDateString('en-GB', {
-    day: '2-digit', month: 'short', year: 'numeric'
-  }).toUpperCase();
-
-  const projects = data.projects || [];
-  const totalChapters = projects.reduce((s, p) => s + p.chapters.length, 0);
-  const totalWords = projects.reduce((s, p) => s + p.total_words, 0);
-  const totalFinal = projects.reduce((s, p) => s + (p.status_counts.final || 0), 0);
-
-  document.getElementById('stat-works').textContent = pad2(projects.length);
-  document.getElementById('stat-chapters').textContent = pad2(totalChapters);
-  document.getElementById('stat-words').innerHTML = fmt(totalWords) + '<span class="u">자</span>';
-  document.getElementById('stat-final').textContent = pad2(totalFinal);
-  document.getElementById('count').textContent = `${pad2(projects.length)} WORKS`;
-
-  const gen = new Date(data.generated_at);
-  document.getElementById('updated').textContent =
-    'UPDATED · ' + gen.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-
-  const container = document.getElementById('works');
-  if (projects.length === 0) {
-    container.innerHTML = `
-      <div class="empty">
-        <div class="ornament">❦</div>
-        <h3>아직 기록된 작품이 없습니다</h3>
-        <p>첫 원고는 언제나 고요한 터미널에서 시작됩니다.</p>
-        <div class="cmd"><span class="dol">$</span>novelcraft init "작품명"</div>
-      </div>`;
-  } else {
-    container.innerHTML = projects.map(workRow).join('');
-  }
-}
-
-load();
-setInterval(load, 20000);
-
-// ══════════════════════ Atelier interactions ══════════════════════
-
+/* ================================================================
+   TOAST
+   ================================================================ */
 const toastEl = document.getElementById('toast');
 let toastTimer = null;
 function toast(msg, kind = 'ok') {
   toastEl.textContent = msg;
   toastEl.className = 'toast show ' + kind;
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => { toastEl.classList.remove('show'); }, 2800);
+  toastTimer = setTimeout(() => { toastEl.classList.remove('show'); }, 3000);
 }
 
-// ─── Chapter drawer state ───
+/* ================================================================
+   LOAD DATA
+   ================================================================ */
+async function load() {
+  let data;
+  try {
+    const r = await fetch('/api/projects');
+    data = await r.json();
+  } catch (e) {
+    document.getElementById('main-content').innerHTML =
+      '<div class="empty"><div class="ornament">!</div><h3>서버에 연결할 수 없습니다</h3><p>novelcraft 서버가 실행 중인지 확인하세요.</p></div>';
+    return;
+  }
+
+  // update date
+  const now = new Date();
+  document.getElementById('date').textContent = now.toLocaleDateString('en-GB', {
+    day: '2-digit', month: 'short', year: 'numeric'
+  }).toUpperCase();
+
+  const gen = new Date(data.generated_at);
+  document.getElementById('updated').textContent =
+    'UPDATED ' + gen.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+  allProjects = data.projects || [];
+
+  if (activeProjectIndex >= allProjects.length) {
+    activeProjectIndex = 0;
+  }
+
+  renderProjectSelector();
+  renderActiveProject();
+}
+
+/* ================================================================
+   PROJECT SELECTOR (Feature 6)
+   ================================================================ */
+function renderProjectSelector() {
+  const container = document.getElementById('project-selector');
+
+  if (allProjects.length === 0) {
+    container.innerHTML = '';
+    return;
+  }
+
+  if (allProjects.length === 1) {
+    const p = allProjects[0];
+    container.innerHTML = `
+      <div class="single-project-label">
+        ${escapeHtml(p.name)}
+        <span class="genre-tag">${escapeHtml(p.genre)}</span>
+      </div>`;
+    return;
+  }
+
+  // multiple projects: tabs
+  container.innerHTML = '<div class="project-tabs">' +
+    allProjects.map((p, i) =>
+      `<button class="project-tab ${i === activeProjectIndex ? 'active' : ''}" data-pidx="${i}">
+        ${escapeHtml(p.name)}
+      </button>`
+    ).join('') + '</div>';
+}
+
+/* ================================================================
+   RENDER ACTIVE PROJECT
+   ================================================================ */
+function renderActiveProject() {
+  const mc = document.getElementById('main-content');
+
+  if (allProjects.length === 0) {
+    mc.innerHTML = `
+      <div class="empty">
+        <div class="ornament">&#10087;</div>
+        <h3>아직 기록된 작품이 없습니다</h3>
+        <p>첫 원고는 언제나 고요한 터미널에서 시작됩니다.</p>
+        <div class="cmd"><span class="dol">$</span>novelcraft init "작품명"</div>
+      </div>`;
+    return;
+  }
+
+  const p = allProjects[activeProjectIndex];
+  if (!p) return;
+
+  const sc = p.status_counts || {};
+  const totalChapters = p.chapters ? p.chapters.length : 0;
+  const finalCount = sc.final || 0;
+  const draftCount = sc.draft || 0;
+  const revisedCount = sc.revised || 0;
+  const progressPct = pct(p.progress);
+  const pageEstimate = Math.ceil((p.total_words || 0) / 800); // ~800 chars per page for Korean
+
+  // chapter cells
+  let chapterCells = '';
+  if (p.chapters && p.chapters.length > 0) {
+    chapterCells = p.chapters.map((c, idx) => {
+      const words = c.words ? `${fmt(c.words)}자` : '--';
+      const num = idx + 1;
+      return `<div class="chapter-cell ${c.status}" data-project="${escapeHtml(p.name)}" data-chapter="${escapeHtml(c.id)}">
+        <span class="cell-num">${pad2(num)}</span>
+        <span class="tip"><b>${escapeHtml(c.id.toUpperCase())}</b>${STATUS_LABEL[c.status] || c.status} · ${words}</span>
+      </div>`;
+    }).join('');
+  } else {
+    chapterCells = '<div class="strip-empty">챕터 비트가 비어 있습니다. outline/chapters.md에 챕터를 추가하세요.</div>';
+  }
+
+  mc.innerHTML = `
+    <!-- Progress Overview (Feature 1) -->
+    <div class="progress-section">
+      <div class="progress-hero">
+        <div class="pct">${progressPct}<span class="sign">%</span></div>
+        <div class="pct-label">전체 진행률</div>
+        <div class="progress-bar-wrap">
+          <div class="progress-bar-fill" style="width:${progressPct}%"></div>
+        </div>
+      </div>
+      <div class="progress-stats">
+        <div class="stat-row">
+          <span class="stat-k">총 글자 수</span>
+          <span class="stat-v">${fmt(p.total_words)}<span class="unit">자</span></span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-k">목표 글자 수</span>
+          <span class="stat-v">${fmt(p.target_length)}<span class="unit">자</span></span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-k">추정 페이지</span>
+          <span class="stat-v">${fmt(pageEstimate)}<span class="unit">쪽</span></span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-k">전체 챕터</span>
+          <span class="stat-v">${totalChapters}</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-k">완성 챕터</span>
+          <span class="stat-v gold">${finalCount}</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-k">초고 / 수정</span>
+          <span class="stat-v">${draftCount} / ${revisedCount}</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-k">최종 수정</span>
+          <span class="stat-v" style="font-size:14px">${relTime(p.last_touched_iso)}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Project Actions (Feature 4, 5) -->
+    <div class="project-actions">
+      <button class="btn" data-action="bible" data-project="${escapeHtml(p.name)}">
+        <svg class="icon-svg" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+        Edit Bible
+      </button>
+      <button class="btn" data-action="download" data-project="${escapeHtml(p.name)}">
+        <svg class="icon-svg" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        DOCX 다운로드
+      </button>
+    </div>
+
+    <!-- Chapter Grid (Feature 2) -->
+    <div class="chapters-section">
+      <div class="chapters-head">
+        <h2>챕터 <em>원고</em></h2>
+        <div class="count">${pad2(totalChapters)} CHAPTERS</div>
+      </div>
+      <div class="chapter-strip">${chapterCells}</div>
+      <div class="strip-legend">
+        <span><i class="sw planned"></i>예정</span>
+        <span><i class="sw draft"></i>초고</span>
+        <span><i class="sw revised"></i>수정</span>
+        <span><i class="sw final"></i>최종</span>
+      </div>
+    </div>
+  `;
+}
+
+/* ================================================================
+   EVENT DELEGATION (click handling)
+   ================================================================ */
+document.addEventListener('click', (e) => {
+  // project tab
+  const ptab = e.target.closest('.project-tab');
+  if (ptab) {
+    const idx = parseInt(ptab.dataset.pidx, 10);
+    if (!isNaN(idx) && idx !== activeProjectIndex) {
+      activeProjectIndex = idx;
+      renderProjectSelector();
+      renderActiveProject();
+    }
+    return;
+  }
+
+  // chapter cell
+  const cell = e.target.closest('.chapter-cell');
+  if (cell && cell.dataset.project && cell.dataset.chapter) {
+    openDrawer(cell.dataset.project, cell.dataset.chapter);
+    return;
+  }
+
+  // project action buttons
+  const actionBtn = e.target.closest('[data-action]');
+  if (actionBtn) {
+    const action = actionBtn.dataset.action;
+    const project = actionBtn.dataset.project;
+    if (action === 'bible') {
+      openBibleModal(project);
+    } else if (action === 'download') {
+      downloadDocx(project);
+    }
+    return;
+  }
+});
+
+/* ================================================================
+   KEYBOARD SHORTCUTS
+   ================================================================ */
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    if (document.getElementById('bible-modal').classList.contains('open')) {
+      closeBibleModal();
+    } else if (drawer.classList.contains('open')) {
+      closeDrawer();
+    }
+  }
+});
+
+/* ================================================================
+   CHAPTER DRAWER (Feature 2/3)
+   ================================================================ */
 const drawer = document.getElementById('drawer');
 const drawerBackdrop = document.getElementById('drawer-backdrop');
 const drBody = document.getElementById('dr-body');
 const drCid = document.getElementById('dr-cid');
 const drProj = document.getElementById('dr-proj');
+const drStatus = document.getElementById('dr-status');
 const drWriteBtn = document.getElementById('dr-write');
 const drApproveBtn = document.getElementById('dr-approve');
 const drRefreshBtn = document.getElementById('dr-refresh');
-
-let currentChapter = null;  // { project, chapter_id }
-let activeEventSource = null;
+const logSection = document.getElementById('log-section');
+const logPanel = document.getElementById('log-panel');
 
 function openDrawer(project, chapterId) {
   currentChapter = { project, chapter_id: chapterId };
   drCid.textContent = chapterId.toUpperCase();
   drProj.textContent = project;
+  drStatus.textContent = '--';
+  drStatus.className = 'status-pill';
   drawer.classList.add('open');
   drawerBackdrop.classList.add('open');
   drawer.setAttribute('aria-hidden', 'false');
+
+  // reset tabs to beat
+  document.querySelectorAll('#dr-tabs .drawer-tab').forEach(t => {
+    t.classList.toggle('active', t.dataset.tab === 'beat');
+  });
+  drBody.querySelectorAll('.drawer-pane').forEach(p => {
+    p.classList.toggle('active', p.dataset.pane === 'beat');
+  });
+
+  // hide log section
+  logSection.style.display = 'none';
+  logPanel.innerHTML = '';
+
   refreshDrawer();
 }
 
@@ -1126,101 +1404,118 @@ drawerBackdrop.addEventListener('click', closeDrawer);
 document.getElementById('dr-close').addEventListener('click', closeDrawer);
 drRefreshBtn.addEventListener('click', refreshDrawer);
 
+// drawer tab switching
+document.querySelectorAll('#dr-tabs .drawer-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    const name = tab.dataset.tab;
+    document.querySelectorAll('#dr-tabs .drawer-tab').forEach(t =>
+      t.classList.toggle('active', t === tab)
+    );
+    drBody.querySelectorAll('.drawer-pane').forEach(p =>
+      p.classList.toggle('active', p.dataset.pane === name)
+    );
+  });
+});
+
 async function refreshDrawer() {
   if (!currentChapter) return;
   const { project, chapter_id } = currentChapter;
-  drBody.innerHTML = '<div class="drawer-placeholder">불러오는 중…</div>';
+
+  // show loading in all panes
+  ['beat', 'draft', 'final', 'review', 'summary'].forEach(key => {
+    const pane = document.getElementById('pane-' + key);
+    if (pane) pane.innerHTML = '<div class="drawer-placeholder">불러오는 중...</div>';
+  });
+
   try {
     const r = await fetch(`/api/projects/${encodeURIComponent(project)}/chapters/${encodeURIComponent(chapter_id)}`);
     if (!r.ok) throw new Error(`HTTP ${r.status}`);
     const data = await r.json();
-    drBody.innerHTML = renderDrawerContent(data);
-    wireDrawerTabs();
+    renderDrawerContent(data);
     drApproveBtn.disabled = !data.has_draft;
+
+    // update status pill
+    const st = data.status || 'planned';
+    drStatus.textContent = STATUS_LABEL[st] || st;
+    drStatus.className = 'status-pill ' + st;
   } catch (e) {
-    drBody.innerHTML = `<div class="drawer-placeholder">불러오기 실패: ${escapeHtml(e.message)}</div>`;
+    ['beat', 'draft', 'final', 'review', 'summary'].forEach(key => {
+      const pane = document.getElementById('pane-' + key);
+      if (pane) pane.innerHTML = `<div class="drawer-placeholder">불러오기 실패: ${escapeHtml(e.message)}</div>`;
+    });
   }
 }
 
 function renderDrawerContent(d) {
-  const beat = d.beat
-    ? `<div class="beat-text">${escapeHtml(d.beat)}</div>`
-    : `<div class="beat-text">챕터 비트가 비어 있습니다. outline/chapters.md에 <code>## ${d.chapter_id}</code> 섹션을 추가하세요.</div>`;
+  // Beat pane
+  const beatPane = document.getElementById('pane-beat');
+  if (d.beat) {
+    beatPane.innerHTML = `<div class="beat-text">${escapeHtml(d.beat)}</div>`;
+  } else {
+    beatPane.innerHTML = `<div class="drawer-placeholder">챕터 비트가 비어 있습니다. outline/chapters.md에 ## ${escapeHtml(d.chapter_id || '')} 섹션을 추가하세요.</div>`;
+  }
 
-  const parts = [`
-    <div class="drawer-section">
-      <div class="eyebrow">Chapter beat</div>
-      ${beat}
-    </div>
-    <div class="drawer-section" id="log-section" style="display:none">
-      <div class="eyebrow">Live log</div>
-      <div class="log-panel" id="log-panel"></div>
-    </div>
-    <div class="drawer-section">
-      <div class="tabs">
-        <button class="tab active" data-tab="review">Review</button>
-        <button class="tab" data-tab="draft">Draft</button>
-        <button class="tab" data-tab="final">Final</button>
-        <button class="tab" data-tab="summary">Summary</button>
-      </div>
-      <div class="tab-pane active" data-pane="review">${renderReview(d.review)}</div>
-      <div class="tab-pane" data-pane="draft">${renderBody(d.draft, '아직 초고가 없습니다. 위의 "집필 시작" 버튼을 눌러 생성하세요.')}</div>
-      <div class="tab-pane" data-pane="final">${renderBody(d.final, '최종본이 없습니다. 초고 검토 후 "최종 승인"을 누르세요.')}</div>
-      <div class="tab-pane" data-pane="summary">${renderBody(d.summary, '요약은 집필 후 자동 생성됩니다.')}</div>
-    </div>
-  `];
-  return parts.join('');
-}
+  // Draft pane
+  const draftPane = document.getElementById('pane-draft');
+  draftPane.innerHTML = d.draft
+    ? `<div class="book-page">${escapeHtml(d.draft)}</div>`
+    : `<div class="drawer-placeholder">아직 초고가 없습니다. "집필 시작" 버튼을 눌러 생성하세요.</div>`;
 
-function renderBody(text, placeholder) {
-  if (!text) return `<div class="drawer-placeholder">${escapeHtml(placeholder)}</div>`;
-  return `<div class="body-text">${escapeHtml(text)}</div>`;
+  // Final pane
+  const finalPane = document.getElementById('pane-final');
+  finalPane.innerHTML = d.final
+    ? `<div class="book-page">${escapeHtml(d.final)}</div>`
+    : `<div class="drawer-placeholder">최종본이 없습니다. 초고 검토 후 "최종 승인"을 누르세요.</div>`;
+
+  // Review pane
+  const reviewPane = document.getElementById('pane-review');
+  reviewPane.innerHTML = renderReview(d.review);
+
+  // Summary pane
+  const summaryPane = document.getElementById('pane-summary');
+  summaryPane.innerHTML = d.summary
+    ? `<div class="book-page">${escapeHtml(d.summary)}</div>`
+    : `<div class="drawer-placeholder">요약은 집필 후 자동 생성됩니다.</div>`;
 }
 
 function renderReview(review) {
-  if (!review) return `<div class="drawer-placeholder">아직 리뷰가 없습니다.</div>`;
-  if (review.parse_error) return `<div class="drawer-placeholder">리뷰 JSON 파싱 실패.</div>`;
+  if (!review) return '<div class="drawer-placeholder">아직 리뷰가 없습니다.</div>';
+  if (review.parse_error) return '<div class="drawer-placeholder">리뷰 JSON 파싱 실패.</div>';
+
   const overall = review.overall_comment
     ? `<div class="review-summary">${escapeHtml(review.overall_comment)}</div>` : '';
+
   const issues = (review.issues || []).map(i => `
     <div class="review-card">
       <span class="sev ${escapeHtml(i.severity || 'low')}">${escapeHtml(i.severity || '?')}</span>
       <span class="cat">${escapeHtml(i.category || '?')}</span>
       <div class="desc">${escapeHtml(i.description || '')}</div>
-      ${i.suggestion ? `<div class="sug">→ ${escapeHtml(i.suggestion)}</div>` : ''}
+      ${i.suggestion ? `<div class="sug">&rarr; ${escapeHtml(i.suggestion)}</div>` : ''}
     </div>
   `).join('');
+
   const none = (review.issues && review.issues.length === 0)
-    ? `<div class="drawer-placeholder">이슈 없음 — 깨끗한 초고입니다.</div>` : '';
+    ? '<div class="drawer-placeholder">이슈 없음 -- 깨끗한 초고입니다.</div>' : '';
+
   const meta = (typeof review.length_chars === 'number')
     ? `<div style="color:var(--ink-dim);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.08em;margin-bottom:12px">
-         LEN ${fmt(review.length_chars)}자  ·  SCENES ${review.scenes || '?'}  ·  PASS ${review.pass ? '✓' : '✗'}
+         LEN ${fmt(review.length_chars)}자 &middot; SCENES ${review.scenes || '?'} &middot; PASS ${review.pass ? '&#10003;' : '&#10007;'}
        </div>` : '';
+
   return meta + overall + issues + none;
 }
 
-function wireDrawerTabs() {
-  drBody.querySelectorAll('.tab').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const name = btn.dataset.tab;
-      drBody.querySelectorAll('.tab').forEach(b => b.classList.toggle('active', b === btn));
-      drBody.querySelectorAll('.tab-pane').forEach(p => p.classList.toggle('active', p.dataset.pane === name));
-    });
-  });
-}
-
-// ─── Write trigger + SSE ───
+/* ================================================================
+   WRITE BUTTON + SSE (Feature 3)
+   ================================================================ */
 drWriteBtn.addEventListener('click', async () => {
   if (!currentChapter) return;
   const { project, chapter_id } = currentChapter;
   drWriteBtn.disabled = true;
-  drWriteBtn.textContent = '집필 중…';
+  drWriteBtn.innerHTML = '<span class="spinner"></span> 집필 중...';
 
-  // 로그 패널 활성화
-  const logSec = document.getElementById('log-section');
-  const logPanel = document.getElementById('log-panel');
-  if (logSec) logSec.style.display = 'block';
-  if (logPanel) logPanel.innerHTML = '';
+  logSection.style.display = 'block';
+  logPanel.innerHTML = '';
 
   try {
     const r = await fetch(`/api/projects/${encodeURIComponent(project)}/write`, {
@@ -1237,8 +1532,7 @@ drWriteBtn.addEventListener('click', async () => {
   } catch (e) {
     appendLog('error', `집필 시작 실패: ${e.message}`);
     toast(`집필 시작 실패: ${e.message}`, 'err');
-    drWriteBtn.disabled = false;
-    drWriteBtn.textContent = '집필 시작';
+    resetWriteBtn();
   }
 });
 
@@ -1267,32 +1561,38 @@ function streamJob(jobId) {
     } catch (_) {}
     es.close();
     activeEventSource = null;
-    drWriteBtn.disabled = false;
-    drWriteBtn.textContent = '집필 시작';
+    resetWriteBtn();
     refreshDrawer();
-    load();  // 전체 대시보드도 갱신
+    load();
   });
 
   es.onerror = () => {
     appendLog('error', 'SSE 연결 오류');
     es.close();
     activeEventSource = null;
-    drWriteBtn.disabled = false;
-    drWriteBtn.textContent = '집필 시작';
+    resetWriteBtn();
   };
 }
 
+function resetWriteBtn() {
+  drWriteBtn.disabled = false;
+  drWriteBtn.innerHTML = `
+    <svg class="icon-svg" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+    집필 시작`;
+}
+
 function appendLog(stage, msg, iso) {
-  const panel = document.getElementById('log-panel');
-  if (!panel) return;
+  if (!logPanel) return;
   const ts = iso ? new Date(iso).toLocaleTimeString('en-GB') : new Date().toLocaleTimeString('en-GB');
   const line = document.createElement('div');
   line.innerHTML = `<span class="ln">${ts}</span>  <span class="stage-${escapeHtml(stage)}">[${escapeHtml(stage)}]</span>  ${escapeHtml(msg)}`;
-  panel.appendChild(line);
-  panel.scrollTop = panel.scrollHeight;
+  logPanel.appendChild(line);
+  logPanel.scrollTop = logPanel.scrollHeight;
 }
 
-// ─── Approve ───
+/* ================================================================
+   APPROVE
+   ================================================================ */
 drApproveBtn.addEventListener('click', async () => {
   if (!currentChapter) return;
   const { project, chapter_id } = currentChapter;
@@ -1312,32 +1612,23 @@ drApproveBtn.addEventListener('click', async () => {
   }
 });
 
-// ─── Chapter cell click (event delegation) ───
-document.addEventListener('click', (e) => {
-  const cell = e.target.closest('.chapter-cell');
-  if (cell && cell.dataset.project && cell.dataset.chapter) {
-    openDrawer(cell.dataset.project, cell.dataset.chapter);
-    return;
-  }
-  const bibleBtn = e.target.closest('.bible-edit-link');
-  if (bibleBtn && bibleBtn.dataset.bibleProject) {
-    openBibleModal(bibleBtn.dataset.bibleProject);
-    return;
-  }
-});
+/* ================================================================
+   DOCX DOWNLOAD (Feature 5)
+   ================================================================ */
+function downloadDocx(project) {
+  toast('DOCX 파일을 생성하는 중...', 'ok');
+  const url = `/api/projects/${encodeURIComponent(project)}/export/docx`;
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${project}.docx`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
 
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') {
-    if (document.getElementById('bible-modal').classList.contains('open')) {
-      closeBibleModal();
-    } else if (drawer.classList.contains('open')) {
-      closeDrawer();
-    }
-  }
-});
-
-// ══════════════════════ Bible editor ══════════════════════
-
+/* ================================================================
+   BIBLE EDITOR (Feature 4)
+   ================================================================ */
 const bibleModal = document.getElementById('bible-modal');
 const bmFilename = document.getElementById('bm-filename');
 const bmProj = document.getElementById('bm-proj');
@@ -1352,7 +1643,7 @@ async function openBibleModal(project) {
   bmProj.textContent = project;
   bmFilename.textContent = '파일을 선택하세요';
   bmEditor.value = '';
-  bmStatus.textContent = '—';
+  bmStatus.textContent = '--';
   bmSize.textContent = '0 bytes';
   bibleModal.classList.add('open');
 
@@ -1368,15 +1659,18 @@ async function openBibleModal(project) {
 function renderBibleFileList(data) {
   const common = document.getElementById('bible-files-common');
   const chars = document.getElementById('bible-files-chars');
-  common.innerHTML = data.common.map(f =>
+
+  common.innerHTML = (data.common || []).map(f =>
     `<button class="file-item" data-file="${escapeHtml(f)}">${escapeHtml(f)}</button>`
   ).join('');
-  chars.innerHTML = (data.characters.length
-    ? data.characters.map(f =>
-        `<button class="file-item" data-file="${escapeHtml(f)}">${escapeHtml(f.replace('bible/characters/', ''))} <span class="dim">· char</span></button>`
+
+  const charFiles = data.characters || [];
+  chars.innerHTML = charFiles.length
+    ? charFiles.map(f =>
+        `<button class="file-item" data-file="${escapeHtml(f)}">${escapeHtml(f.replace('bible/characters/', ''))} <span class="dim">&middot; char</span></button>`
       ).join('')
-    : `<div style="padding:8px 28px;font-size:11px;color:var(--ink-faint);font-family:'Fraunces',serif;font-style:italic">인물 파일이 없습니다.</div>`
-  );
+    : '<div style="padding:8px 28px;font-size:11px;color:var(--ink-faint);font-family:\'Fraunces\',serif;font-style:italic">인물 파일이 없습니다.</div>';
+
   document.querySelectorAll('#bible-modal .file-item').forEach(b => {
     b.addEventListener('click', () => loadBibleFile(b.dataset.file));
   });
@@ -1423,7 +1717,7 @@ document.getElementById('bm-save').addEventListener('click', async () => {
     bibleState.dirty = false;
     bmStatus.textContent = `저장됨 · ${fmt(data.bytes)} bytes`;
     toast('저장 완료', 'ok');
-    load();  // readiness 바 갱신
+    load();
   } catch (e) {
     toast(`저장 실패: ${e.message}`, 'err');
   }
@@ -1437,6 +1731,24 @@ document.getElementById('bm-close').addEventListener('click', closeBibleModal);
 bibleModal.addEventListener('click', (e) => {
   if (e.target === bibleModal) closeBibleModal();
 });
+
+/* ================================================================
+   CTRL+S to save in bible editor
+   ================================================================ */
+document.addEventListener('keydown', (e) => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+    if (bibleModal.classList.contains('open') && bibleState.file) {
+      e.preventDefault();
+      document.getElementById('bm-save').click();
+    }
+  }
+});
+
+/* ================================================================
+   INIT
+   ================================================================ */
+load();
+setInterval(load, 20000);
 </script>
 </body>
 </html>

@@ -1,0 +1,6 @@
+{
+  "name": "셀라의 문",
+  "genre": "현대 판타지",
+  "target_length": 65000,
+  "model": "gemini-2.5-flash"
+}

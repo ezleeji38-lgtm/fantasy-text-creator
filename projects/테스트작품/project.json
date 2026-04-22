@@ -1,0 +1,7 @@
+{
+  "name": "테스트작품",
+  "genre": "정통 판타지",
+  "target_length": 65000,
+  "target_pages": 120,
+  "model": "claude-opus-4-6"
+}

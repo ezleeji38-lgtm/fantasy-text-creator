@@ -15,7 +15,7 @@ from pathlib import Path
 from typing import Any
 
 from fastapi import FastAPI, HTTPException, Request
-from fastapi.responses import HTMLResponse, JSONResponse, StreamingResponse
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, StreamingResponse
 
 from .config import PROJECTS_DIR
 from .jobs import JobEvent, manager as job_manager
@@ -185,6 +185,8 @@ def _scan_project(project_path: Path) -> dict | None:
     last_touched = max((c["touched"] for c in chapters), default=_mtime(meta_file))
     last_iso = datetime.fromtimestamp(last_touched).isoformat() if last_touched else None
 
+    images = _scan_images(project_path)
+
     return {
         "name": meta.get("name", project_path.name),
         "genre": meta.get("genre", "판타지"),
@@ -195,9 +197,31 @@ def _scan_project(project_path: Path) -> dict | None:
         "chapters": chapters,
         "status_counts": status_counts,
         "bible": _bible_report(project_path),
+        "images": images,
         "last_touched": last_touched,
         "last_touched_iso": last_iso,
     }
+
+
+IMAGE_EXTS = {".png", ".jpg", ".jpeg", ".webp", ".gif"}
+
+
+def _scan_images(project_path: Path) -> list[dict]:
+    img_dir = project_path / "images"
+    if not img_dir.exists():
+        return []
+    images: list[dict] = []
+    for f in sorted(img_dir.iterdir()):
+        if f.suffix.lower() in IMAGE_EXTS and f.is_file():
+            label = f.stem.replace("_", " ")
+            if label and label[0].isdigit() and " " in label:
+                label = label.split(" ", 1)[1]
+            images.append({
+                "filename": f.name,
+                "label": label.title(),
+                "size_kb": round(f.stat().st_size / 1024),
+            })
+    return images
 
 
 def scan_all_projects() -> list[dict]:
@@ -291,6 +315,26 @@ def create_app() -> FastAPI:
         shutil.copyfile(draft, final)
         return JSONResponse({"ok": True, "final_path": str(final)})
 
+    # ─────────── 이미지 서빙 ───────────
+    @app.get("/api/projects/{name}/images")
+    def api_images_list(name: str) -> JSONResponse:
+        path = _project_path(name)
+        return JSONResponse({"images": _scan_images(path)})
+
+    @app.get("/api/projects/{name}/images/{filename}")
+    def api_image_file(name: str, filename: str) -> FileResponse:
+        path = _project_path(name)
+        if ".." in filename or "/" in filename or "\\" in filename:
+            raise HTTPException(status_code=400, detail="invalid filename")
+        img = path / "images" / filename
+        if not img.exists() or img.suffix.lower() not in IMAGE_EXTS:
+            raise HTTPException(status_code=404, detail="image not found")
+        media = {
+            ".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg",
+            ".webp": "image/webp", ".gif": "image/gif",
+        }.get(img.suffix.lower(), "application/octet-stream")
+        return FileResponse(img, media_type=media)
+
     # ─────────── Bible 읽기/편집 ───────────
     @app.get("/api/projects/{name}/bible")
     def api_bible_read(name: str, file: str) -> JSONResponse:
@@ -328,6 +372,126 @@ def create_app() -> FastAPI:
             for f in sorted(char_dir.glob("*.md")):
                 chars.append(f"bible/characters/{f.name}")
         return JSONResponse({"common": files, "characters": chars})
+
+    # ─────────── DOCX 다운로드 ───────────
+    @app.get("/api/projects/{name}/export/docx")
+    def api_export_docx(name: str):
+        """전체 챕터를 하나의 DOCX로 컴파일해 다운로드."""
+        from docx import Document as DocxDocument
+        from docx.shared import Pt, Cm, RGBColor
+        from docx.enum.text import WD_ALIGN_PARAGRAPH
+        import tempfile
+
+        path = _project_path(name)
+        meta_file = path / "project.json"
+        meta = json.loads(meta_file.read_text(encoding="utf-8"))
+
+        doc = DocxDocument()
+        style = doc.styles['Normal']
+        style.font.name = '맑은 고딕'
+        style.font.size = Pt(11)
+        style.paragraph_format.line_spacing = 1.8
+        style.paragraph_format.space_after = Pt(4)
+        for s in doc.sections:
+            s.top_margin = Cm(3); s.bottom_margin = Cm(3)
+            s.left_margin = Cm(2.5); s.right_margin = Cm(2.5)
+
+        # 표지
+        for _ in range(4):
+            doc.add_paragraph()
+        t = doc.add_paragraph()
+        t.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        r = t.add_run(meta.get("name", name))
+        r.font.size = Pt(32); r.bold = True
+        doc.add_paragraph()
+        doc.add_page_break()
+
+        # 챕터 수집 (final > expanded > final_v > draft 순)
+        planned = _parse_chapter_plan(_read_text(path / "outline/chapters.md"))
+        drafts_dir = path / "drafts"
+        final_dir = path / "final"
+        total_chars = 0
+
+        for ch in planned:
+            cid = ch["id"]
+            # 파일 우선순위
+            candidates = []
+            if final_dir.exists():
+                candidates.append(final_dir / f"{cid}.md")
+            if drafts_dir.exists():
+                for suffix in ["_final.md", "_expanded.md", "_v2.md", "_draft.md"]:
+                    candidates.append(drafts_dir / f"{cid}{suffix}")
+
+            content = ""
+            for c in candidates:
+                if c.exists():
+                    content = c.read_text(encoding="utf-8")
+                    break
+
+            if not content:
+                continue
+
+            # 챕터 제목
+            doc.add_paragraph()
+            cl = doc.add_paragraph()
+            cl.alignment = WD_ALIGN_PARAGRAPH.CENTER
+            r = cl.add_run(f'Chapter {cid[2:]}')
+            r.font.size = Pt(12)
+            r.font.color.rgb = RGBColor(0x88, 0x88, 0x88)
+
+            title_text = ch.get("title") or cid
+            ct = doc.add_paragraph()
+            ct.alignment = WD_ALIGN_PARAGRAPH.CENTER
+            r = ct.add_run(title_text)
+            r.font.size = Pt(18); r.bold = True
+            doc.add_paragraph()
+
+            # 본문
+            body_started = False
+            for line in content.split('\n'):
+                if line.startswith('# '):
+                    body_started = True
+                    continue
+                if not body_started:
+                    continue
+                stripped = line.strip()
+                if not stripped:
+                    continue
+                if stripped == '* * *':
+                    doc.add_paragraph()
+                    p = doc.add_paragraph()
+                    p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+                    r = p.add_run('*   *   *')
+                    r.font.color.rgb = RGBColor(0x99, 0x99, 0x99)
+                    doc.add_paragraph()
+                    continue
+                p = doc.add_paragraph()
+                p.paragraph_format.first_line_indent = Cm(1)
+                r = p.add_run(stripped)
+                r.font.size = Pt(11)
+                total_chars += len(stripped)
+
+            doc.add_page_break()
+
+        # 끝
+        doc.add_paragraph()
+        end = doc.add_paragraph()
+        end.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        r = end.add_run('— 끝 —')
+        r.font.size = Pt(14)
+        r.font.color.rgb = RGBColor(0x99, 0x99, 0x99)
+
+        # 임시 파일에 저장 후 반환
+        tmp = tempfile.NamedTemporaryFile(suffix=".docx", delete=False)
+        doc.save(tmp.name)
+        tmp.close()
+
+        safe_name = name.replace(" ", "_")
+        return FileResponse(
+            tmp.name,
+            media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            filename=f"{safe_name}_전체본.docx",
+        )
 
     # ─────────── 집필 잡 & SSE ───────────
     @app.post("/api/projects/{name}/write")

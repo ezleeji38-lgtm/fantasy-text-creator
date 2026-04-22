@@ -1,4 +1,4 @@
-"""챕터 집필 엔진. Claude Opus + 프롬프트 캐싱."""
+"""챕터 집필 엔진. Provider 추상화로 Anthropic/Gemini/Ollama 전환 가능."""
 from __future__ import annotations
 
 import json
@@ -6,10 +6,9 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable
 
-from anthropic import Anthropic
-
 from .bible import BibleBundle, load_bible, load_chapter_beat, load_previous_summary
-from .config import PROMPTS_DIR, ProjectConfig, require_api_key
+from .config import PROMPTS_DIR, ProjectConfig
+from .providers import LLMProvider, get_provider
 
 ProgressFn = Callable[[str, str], None]  # (stage, message) 콜백
 
@@ -36,47 +35,18 @@ def _fill(template: str, **kwargs: str) -> str:
 
 
 class ChapterWriter:
-    def __init__(self, cfg: ProjectConfig):
+    def __init__(self, cfg: ProjectConfig, provider: LLMProvider | None = None):
         self.cfg = cfg
-        self.client = Anthropic(api_key=require_api_key())
+        self.provider = provider or get_provider(model=cfg.model)
 
-    def _build_system(self, bible: BibleBundle) -> list[dict]:
-        """시스템 프롬프트. Bible을 캐시 가능한 블록으로 올린다."""
-        return [
-            {
-                "type": "text",
-                "text": (
-                    "당신은 한국어 판타지 단행본 전문 집필 AI입니다. "
-                    "아래 작품 바이블을 절대 기준으로 삼아 작업합니다. "
-                    "바이블은 이 세션에서 캐싱되어 반복 참조됩니다."
-                ),
-            },
-            {
-                "type": "text",
-                "text": bible.text,
-                "cache_control": {"type": "ephemeral"},
-            },
-        ]
-
-    def _call(self, system: list[dict], user_text: str, max_tokens: int) -> tuple[str, dict]:
-        resp = self.client.messages.create(
-            model=self.cfg.model,
-            max_tokens=max_tokens,
+    def _call(self, system: str, user_text: str, max_tokens: int) -> tuple[str, dict]:
+        resp = self.provider.generate(
             system=system,
-            messages=[{"role": "user", "content": user_text}],
+            user=user_text,
+            max_tokens=max_tokens,
+            cache_system=True,
         )
-        text = "".join(b.text for b in resp.content if b.type == "text")
-        usage = {
-            "input_tokens": resp.usage.input_tokens,
-            "output_tokens": resp.usage.output_tokens,
-            "cache_creation_input_tokens": getattr(
-                resp.usage, "cache_creation_input_tokens", 0
-            ),
-            "cache_read_input_tokens": getattr(
-                resp.usage, "cache_read_input_tokens", 0
-            ),
-        }
-        return text, usage
+        return resp.text, resp.usage_dict
 
     def write_chapter(
         self,
@@ -96,10 +66,10 @@ class ChapterWriter:
         prev = load_previous_summary(self.cfg, chapter_id) or "(첫 챕터이거나 직전 요약 없음)"
         emit("load", f"Bible {len(bible):,}자 로드 완료 (~{bible.token_estimate:,} 토큰)")
 
-        system = self._build_system(bible)
+        system = bible.text
 
-        # 1. 본문 집필
-        emit("write", f"Claude {self.cfg.model} 호출 — 본문 집필 시작")
+        # 1. 본문 집필 (1패스)
+        emit("write", f"{self.provider.name}/{self.provider.model_id} 호출 — 1패스 집필")
         write_prompt = _fill(
             _load_prompt("write_chapter.md"),
             chapter_id=chapter_id,
@@ -107,7 +77,21 @@ class ChapterWriter:
             previous_summary=prev,
         )
         chapter_text, usage_write = self._call(system, write_prompt, max_tokens=16000)
-        emit("write", f"본문 {len(chapter_text):,}자 생성 완료")
+        emit("write", f"1패스 완료: {len(chapter_text):,}자")
+
+        # 2패스: 분량 부족 시 확장
+        min_length = 5000
+        if len(chapter_text) < min_length:
+            emit("expand", f"분량 부족({len(chapter_text):,}자 < {min_length}자) — 2패스 확장 시작")
+            expand_prompt = _fill(
+                _load_prompt("expand_chapter.md"),
+                chapter_text=chapter_text,
+            )
+            chapter_text, usage_expand = self._call(system, expand_prompt, max_tokens=16000)
+            usage_write = _merge_usage([usage_write, usage_expand])
+            emit("expand", f"2패스 완료: {len(chapter_text):,}자")
+
+        emit("write", f"본문 최종 {len(chapter_text):,}자 생성 완료")
 
         # 초고 저장
         self.cfg.drafts_dir.mkdir(parents=True, exist_ok=True)
