@@ -1,0 +1,6 @@
+{
+  "name": "하모니와 디스코드",
+  "genre": "어반 판타지",
+  "target_length": 75000,
+  "model": "gemini-2.5-flash"
+}
