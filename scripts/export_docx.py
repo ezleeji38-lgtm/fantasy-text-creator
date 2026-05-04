@@ -11,7 +11,8 @@ from docx import Document as DocxDocument
 from docx.shared import Pt, Cm, RGBColor
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 
-CHAPTER_HEADER_RE = re.compile(r"^##\s+(ch\d{2,3})\s*[—–\-:]?\s*(.*)$", re.MULTILINE)
+CHAPTER_HEADER_RE = re.compile(r"^##[ \t]+(ch\d{2,3})[ \t]*[—–\-:]?[ \t]*([^\n]*)$", re.MULTILINE)
+TITLE_LINE_RE = re.compile(r"^[-*]?\s*\*\*제목\*\*\s*:?\s*(.+)$", re.MULTILINE)
 
 
 def parse_chapter_plan(text: str) -> list[dict]:
@@ -19,8 +20,15 @@ def parse_chapter_plan(text: str) -> list[dict]:
     chapters = []
     for i, m in enumerate(matches):
         cid = m.group(1)
-        title = m.group(2).strip().lstrip("—–-: ").strip()
-        chapters.append({"id": cid, "title": title or cid})
+        same_line_title = m.group(2).strip().lstrip("—–-: ").strip()
+        # 다음 챕터 헤더까지 본문에서 "- **제목**: ..." 라인 찾기
+        start = m.end()
+        end = matches[i + 1].start() if i + 1 < len(matches) else len(text)
+        body = text[start:end]
+        body_title_match = TITLE_LINE_RE.search(body)
+        body_title = body_title_match.group(1).strip() if body_title_match else ""
+        title = same_line_title or body_title or cid
+        chapters.append({"id": cid, "title": title})
     return chapters
 
 
@@ -79,11 +87,13 @@ def export(project_dir: Path, out_path: Path, label: str) -> int:
             continue
 
         doc.add_paragraph()
-        cl = doc.add_paragraph()
-        cl.alignment = WD_ALIGN_PARAGRAPH.CENTER
-        r = cl.add_run(f"Chapter {cid[2:]}")
-        r.font.size = Pt(12)
-        r.font.color.rgb = RGBColor(0x88, 0x88, 0x88)
+        # 프롤로그(ch00)는 Chapter 라벨 생략
+        if cid != "ch00":
+            cl = doc.add_paragraph()
+            cl.alignment = WD_ALIGN_PARAGRAPH.CENTER
+            r = cl.add_run(f"Chapter {cid[2:]}")
+            r.font.size = Pt(12)
+            r.font.color.rgb = RGBColor(0x88, 0x88, 0x88)
 
         ct = doc.add_paragraph()
         ct.alignment = WD_ALIGN_PARAGRAPH.CENTER
